@@ -1,4 +1,4 @@
-package br.com.portaldevagas.gestao_vagas.modules.candidate;
+package br.com.portaldevagas.gestao_vagas.modules.candidate.entities;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -30,7 +30,9 @@ public class CandidateEntity {
   @Email(message = "O campo e-mail deve conter um e-mail válido")
   private String email;
 
-  @Length(min = 6, max = 12, message = "A senha deve conter entre 6 e 12 caracteres")
+  @NotBlank
+  // @Length(min = 6, max = 20, message = "A senha deve conter entre 6 e 20
+  // caracteres")
   private String password;
 
   @Length(min = 3, max = 3000, message = "A descrição deve conter entre 3 e 3000 caracteres")
