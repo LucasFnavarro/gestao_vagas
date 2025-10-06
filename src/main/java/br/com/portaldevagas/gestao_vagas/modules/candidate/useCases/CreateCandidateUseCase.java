@@ -1,9 +1,9 @@
 package br.com.portaldevagas.gestao_vagas.modules.candidate.useCases;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.portaldevagas.gestao_vagas.exceptions.UserFoundException;
 import br.com.portaldevagas.gestao_vagas.modules.candidate.ICandidateRepository;
 import br.com.portaldevagas.gestao_vagas.modules.candidate.entities.CandidateEntity;
@@ -12,6 +12,9 @@ import br.com.portaldevagas.gestao_vagas.modules.candidate.entities.CandidateEnt
 public class CreateCandidateUseCase {
   @Autowired
   private final ICandidateRepository candidateRepository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   public CreateCandidateUseCase(ICandidateRepository candidateRepository) {
     this.candidateRepository = candidateRepository;
@@ -23,10 +26,10 @@ public class CreateCandidateUseCase {
           throw new UserFoundException();
         });
 
-    var passwordHashed = BCrypt.withDefaults()
-        .hashToString(12, candidateEntity.getPassword().toCharArray());
+    var password = passwordEncoder.encode(candidateEntity.getPassword());
 
-    candidateEntity.setPassword(passwordHashed);
+    candidateEntity.setPassword(candidateEntity.getPassword());
+    candidateEntity.setPassword(password);
 
     return this.candidateRepository.save(candidateEntity);
   }
