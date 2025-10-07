@@ -5,8 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.portaldevagas.gestao_vagas.exceptions.UserFoundException;
-import br.com.portaldevagas.gestao_vagas.modules.candidate.ICandidateRepository;
 import br.com.portaldevagas.gestao_vagas.modules.candidate.entities.CandidateEntity;
+import br.com.portaldevagas.gestao_vagas.modules.candidate.repositories.ICandidateRepository;
 
 @Service
 public class CreateCandidateUseCase {
@@ -27,8 +27,6 @@ public class CreateCandidateUseCase {
         });
 
     var password = passwordEncoder.encode(candidateEntity.getPassword());
-
-    candidateEntity.setPassword(candidateEntity.getPassword());
     candidateEntity.setPassword(password);
 
     return this.candidateRepository.save(candidateEntity);

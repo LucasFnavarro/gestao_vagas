@@ -1,5 +1,8 @@
 package br.com.portaldevagas.gestao_vagas.modules.company.useCases;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import javax.naming.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,7 @@ public class AuthCompanyUseCase {
 
     var token = JWT.create().withIssuer("javagas")
         .withSubject(company.getId().toString())
+        .withExpiresAt(Instant.now().plus(Duration.ofHours(1)))
         .sign(algorithm);
 
     return token;
