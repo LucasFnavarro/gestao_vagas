@@ -2,6 +2,7 @@ package br.com.portaldevagas.gestao_vagas.modules.candidate.useCases;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 
 import javax.naming.AuthenticationException;
 
@@ -15,6 +16,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
 import br.com.portaldevagas.gestao_vagas.modules.candidate.dto.AuthCandidateRequestDTO;
+import br.com.portaldevagas.gestao_vagas.modules.candidate.dto.AuthCandidateResponseDTO;
 import br.com.portaldevagas.gestao_vagas.modules.candidate.repositories.ICandidateRepository;
 
 @Service
@@ -29,7 +31,8 @@ public class AuthCandidateUseCase {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  public String execute(AuthCandidateRequestDTO authCandidateRequestDTO) throws AuthenticationException {
+  public AuthCandidateResponseDTO execute(AuthCandidateRequestDTO authCandidateRequestDTO)
+      throws AuthenticationException {
     var candidate = this.candidateRepository.findByUsername(authCandidateRequestDTO.username())
         .orElseThrow(() -> {
           throw new UsernameNotFoundException("Username or password incorrect.");
@@ -43,12 +46,20 @@ public class AuthCandidateUseCase {
 
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
+    var expiresIn = Instant.now().plus(Duration.ofMinutes(10));
+
     var token = JWT.create()
         .withIssuer("javagas")
         .withSubject(candidate.getId().toString())
-        .withExpiresAt(Instant.now().plus(Duration.ofHours(1)))
+        .withClaim("roles", Arrays.asList("candidate"))
+        .withExpiresAt(expiresIn)
         .sign(algorithm);
 
-    return token;
+    var authCandidateResponse = AuthCandidateResponseDTO.builder()
+        .access_token(token)
+        .expires_in(expiresIn.toEpochMilli())
+        .build();
+
+    return authCandidateResponse;
   }
 }
