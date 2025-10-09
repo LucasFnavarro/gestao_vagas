@@ -13,12 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
-
-  private final MessageSource messageSource;
-
-  public ExceptionHandlerController(MessageSource message) {
-    this.messageSource = message;
-  }
+  private MessageSource messageSource;
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<List<ErrorMessageDTO>> handleMethodArgumentNotValidException(

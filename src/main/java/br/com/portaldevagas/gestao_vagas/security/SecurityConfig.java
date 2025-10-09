@@ -21,6 +21,12 @@ public class SecurityConfig {
   @Autowired
   private SecurityCandidateFilter securityCandidateFilter;
 
+  private static final String[] SWAGGER_LIST = {
+      "/swagger-ui/**",
+      "/v3/api-docs/**",
+      "/swagger-resources/**",
+  };
+
   @Bean // O Spring vai usar esse bean para definir todas as regras de segurança da
         // aplicação.
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,7 +36,9 @@ public class SecurityConfig {
           auth.requestMatchers("/candidate").permitAll()
               .requestMatchers("/company").permitAll()
               .requestMatchers("/company/auth").permitAll()
-              .requestMatchers("/candidate/auth").permitAll();
+              .requestMatchers("/candidate/auth").permitAll()
+              .requestMatchers(SWAGGER_LIST).permitAll()
+              .requestMatchers("/candidate/job");
 
           // Qualquer requisição que não tenha sido explicitamente listada antes deve
           // exigir autenticação.
