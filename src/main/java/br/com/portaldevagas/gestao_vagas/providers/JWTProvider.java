@@ -26,7 +26,6 @@ public class JWTProvider {
       return tokenDecoded;
     } catch (Exception ex) {
       ex.printStackTrace();
-
       return null;
     }
   }

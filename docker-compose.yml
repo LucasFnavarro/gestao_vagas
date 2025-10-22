@@ -10,4 +10,4 @@ services:
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: gestao_vagas
     ports:
-      - 5432:5432
+      - "5432:5432"

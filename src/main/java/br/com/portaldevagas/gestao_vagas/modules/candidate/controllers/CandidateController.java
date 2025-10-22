@@ -55,8 +55,7 @@ public class CandidateController {
   public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity createCandidateRequest) {
     try {
       this.createCandidateUseCase.execute(createCandidateRequest);
-      return ResponseEntity.ok().body("Cadastro realizado com sucesso");
-
+      return ResponseEntity.ok().build();
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
